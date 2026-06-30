@@ -110,7 +110,6 @@ int main(int argc, char **argv)
         result[total_read] = '\0'; // Assurer la terminaison par un caractère nul
     }
 
-    
     // Vérifier les erreurs de lecture
     if (bytes < 0)
     {
