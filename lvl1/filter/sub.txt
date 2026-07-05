@@ -34,9 +34,9 @@ arguments, it must return 1.
 
 For example this should work:
 
-$> echo 'abcdefaaaabcdeabcabcdabc' | ./filter abc | cat -e
+$> echo 'abcdefaaaabcdeabcabcdabc' | ./a.out abc | cat -e
 ***defaaa***de******d***$
-$> echo 'ababcabababc' | ./filter ababc | cat -e
+$> echo 'ababcabababc' | ./a.out ababc | cat -e
 *****ab*****$
 $>
 

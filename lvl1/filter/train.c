@@ -14,36 +14,36 @@ int	filter(char *buffer, const char *target)
 {
 	int				i;
 	unsigned int	target_len;
-	int				j;
-	unsigned int				target_i;
-
-	target_i = 0;
 	i = 0;
 	target_len = strlen(target);
-	j = 0;
+	unsigned int target_i = 0;
+	int j = 0;
+	unsigned int target_j = 0;
 	while (buffer[i])
 	{
 		target_i = 0;
-		if (target[target_i] == buffer[i]) //si target[0] == buffer[i] -> on rentre dans la condition
+		if (buffer[i] == target[0]) //si target[0] == buffer[i] -> on rentre dans la condition
 		{
 			j = i; //j reprend la ou i s'est arrete
-			while (target[target_i] == buffer[j]) //tant que les char sont identiques
+			while (target[target_i] == buffer[j] && target[target_i] && buffer[j]) //tant que les char sont identiques
 			{
 				j++;
 				target_i++;
 			}
 			if (target_i == target_len) //si on a atteint la fin de la target, on a trouve l'occurrence -> on remplace
 			{
-				write(1, "*", target_len);
+				target_j = 0;
+				while (target_j < target_len)
+				{
+					write(1, "*", 1);
+					target_j++;
+				}
 				i += target_len; //on fait reprendre i a la fin de l'occurrence
 			}
-			else if (target_i < target_len)//si on atteint pas la fin, occurence incomplete donc on ecrit
+			else if (target_i < target_len)//si on atteint pas la fin, occurrence incomplete donc on ecrit
 			{
-				while (i <= j)
-				{
 					write(1, &buffer[i], 1);
 					i++;
-				}
 			}
 		}
 		else //sinon on ecrit normalement la string
@@ -63,7 +63,7 @@ int	main(int argc, char **argv)
 	int				bytes;
 	char			temp[BUFFER_SIZE];
 	char			*res;
-	char			*buffer;
+	char			*	buffer;
 	unsigned long	total_read;
 
 	bytes = 0;
@@ -97,4 +97,9 @@ int	main(int argc, char **argv)
 	if (!res)
 		return (0);
 	filter(res, argv[1]);
+	// char *a = "ababcabababc";
+	// char *b = "ababc";
+	// filter(a, b);
+	// printf("\n");
+	return 0;
 }
