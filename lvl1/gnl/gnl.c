@@ -2,58 +2,65 @@
 
 char	*ft_strchr(char *s, int c)
 {
-	int	i;
-
-	i = 0;
-	if (!s || !s[i])
+	if (!s)
 		return (NULL);
-	while (s[i] != '\0' && s[i] != c)
-		i++;
-	if (s[i] == c)
-		return (s + i);
-	else
-		return (NULL);
+	while (*s)
+	{
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if (c == '\0')
+		return ((char *)s);
+	return (NULL);
 }
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	if (!src && !dest)
+	size_t i;
+
+	if (n == 0 || dest == src)
+		return (dest);
+	if (!dest && !src)
 		return (NULL);
-	while (n > 0 && ((char *)src)[n])
+	i = 0;
+	while (i < n)
 	{
-		((char *)dest)[n] = ((char *)src)[n];
-		n--;
+		((unsigned char *)dest)[i] = ((const unsigned char *)src)[i];
+		i++;
 	}
-	((char *)dest)[++n] = '\0';
 	return (dest);
 }
 
 size_t	ft_strlen(char *s)
 {
-	size_t	res;
+	size_t res;
 
 	res = 0;
-	if (!s || !s[res])
+	if (!s)
 		return (0);
 	while (s[res])
-	{
-		s++;
 		res++;
-	}
 	return (res);
 }
 
 int	str_append_mem(char **s1, char *s2, size_t size2)
 {
-	size_t	size1;
-	char	*tmp;
+	size_t size1;
+	char *tmp;
 
-	size1 = ft_strlen(*s1);
+	if (!s2 && size2 != 0)
+		return (0);
+	size1 = 0;
+	if (*s1)
+		size1 = ft_strlen(*s1);
 	tmp = malloc(size2 + size1 + 1);
 	if (!tmp)
 		return (0);
-	ft_memcpy(tmp, *s1, size1);
-	ft_memcpy(tmp + size1, s2, size2);
+	if (size1 > 0)
+		ft_memcpy(tmp, *s1, size1);
+	if (size2 > 0)
+		ft_memcpy(tmp + size1, s2, size2);
 	tmp[size1 + size2] = '\0';
 	free(*s1);
 	*s1 = tmp;
@@ -67,19 +74,33 @@ int	str_append_str(char **s1, char *s2)
 
 void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-	size_t	limit;
-	size_t	i;
+	size_t i;
+	unsigned char *d;
+	const unsigned char *s;
 
-	if (dest > src)
-		return (ft_memmove(dest, src, n));
-	else if (dest == src)
+	if (!dest && !src)
+		return (NULL);
+	d = (unsigned char *)dest;
+	s = (const unsigned char *)src;
+	if (d == s || n == 0)
 		return (dest);
-	limit = ft_strlen((char *)src) - 1;
-	i = 0;
-	while (i <= limit)
+	if (d > s)
 	{
-		((char *)dest)[i] = ((char *)src)[i];
-		i++;
+		i = n;
+		while (i > 0)
+		{
+			i--;
+			d[i] = s[i];
+		}
+	}
+	else
+	{
+		i = 0;
+		while (i < n)
+		{
+			d[i] = s[i];
+			i++;
+		}
 	}
 	return (dest);
 }
@@ -130,10 +151,11 @@ int	main(void)
 		printf("Can't open file.\n");
 		return (1);
 	}
-	while (get_next_line(fd) != NULL)
+	line = get_next_line(fd);
+	while (line)
 	{
+		printf("Line %d : %s", i, line);
 		line = get_next_line(fd);
-		printf("Line %d : %s\n", i, line);
 		i++;
 	}
 }

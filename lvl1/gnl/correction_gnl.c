@@ -113,3 +113,25 @@ char *get_next_line(int fd)
 
   return ret;
 }
+
+int	main(void)
+{
+	int		i;
+	int		fd;
+	char	*line;
+
+	i = 0;
+	fd = open("test", O_RDONLY);
+	if (fd < 0)
+	{
+		printf("Can't open file.\n");
+		return (1);
+	}
+	line = get_next_line(fd);
+	while (line)
+	{
+		printf("Line %d : %s", i, line);
+		line = get_next_line(fd);
+		i++;
+	}
+}
