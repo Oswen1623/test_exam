@@ -56,7 +56,7 @@ int main(int argc, char **argv)
         if (!buffer)
         {
             free(result);
-            perror("realloc");
+            perror("Error");
             return 1;
         }
 
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
     }
     if (bytes < 0)
     {
-        perror("read");
+        perror("Error");
         free(result);
         return 1;
     }
