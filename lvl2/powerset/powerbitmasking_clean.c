@@ -48,6 +48,7 @@ int main(int argc, char **argv)
         {
             first = 1;
             i = 0;
+            found = 1;
             while (i < size)
             {
                 if ((mask >> i) & 1)
@@ -60,7 +61,7 @@ int main(int argc, char **argv)
                 i++;
             }
             printf("\n");
-            found = 1;
+
         }
         mask++;
     }

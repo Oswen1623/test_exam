@@ -11,19 +11,19 @@
 #include <unistd.h>
 
 
-void	filter(char *s, char *target)
+void filter(char *s, char *target)
 {
 	int i = 0;
 	int j = 0;
-	int len = strlen(target);
 	int tar = 0;
+	int len = strlen(target);
 	while(s[i])
 	{
 		if (s[i] == target[0])
 		{
-			tar = 0;
 			j = i;
-			while (s[j] == target[tar])
+			tar = 0;
+			while(s[j] == target[tar])
 			{
 				j++;
 				tar++;
@@ -31,8 +31,11 @@ void	filter(char *s, char *target)
 			if (tar == len)
 			{
 				tar = 0;
-				while (tar++ < len)
+				while(tar < len)
+				{
 					write(1, "*", 1);
+					tar++;
+				}
 				i += len;
 			}
 			else
@@ -49,23 +52,21 @@ void	filter(char *s, char *target)
 	}
 }
 
-int	main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	char *buffer = NULL;
-	char *result = NULL;
-	char temp[BUFFER_SIZE];
-	int bytes = 0;
-	int total_read = 0;
-
 	if (argc != 2 || argv[1][0] == '\0')
 		return 1;
 
+	char temp[BUFFER_SIZE];
+	char *buffer;
+	char *result = NULL;
+	int bytes = 0;
+	int total_read = 0;
 	while((bytes = read(0, temp, BUFFER_SIZE)) > 0)
 	{
 		buffer = realloc(result, total_read + bytes);
-		if(!buffer)
+		if (!buffer)
 		{
-			free(result);
 			perror("Error");
 			return 1;
 		}
@@ -76,12 +77,12 @@ int	main(int argc, char **argv)
 	}
 	if (bytes < 0)
 	{
-		free(result);
 		perror("Error");
+		free(result);
 		return 1;
 	}
 	if (!result)
-		return 0;
+		return 1;
 	filter(result, argv[1]);
 	free(result);
 	return 0;

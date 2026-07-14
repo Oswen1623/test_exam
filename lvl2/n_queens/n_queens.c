@@ -67,14 +67,14 @@ void	solve(int *pos, int n, int col)
 	}
 }
 
-int	main(int ac, char **av)
+int	main(int argc, char **argv)
 {
 	int n;
 	int *pos;
 
-	if (ac != 2)
+	if (argc != 2)
 		return (1);
-	n = atoi(av[1]);
+	n = atoi(argv[1]);
 	if (n <= 0)
 		return (0);
 
