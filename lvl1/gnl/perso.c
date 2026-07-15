@@ -60,15 +60,15 @@ int	str_append_mem(char **s1, char *s2, size_t size2)
 		return (0);
 	if (*s1)
 		size1 = ft_strlen(*s1);
-	tmp = malloc((size2 + size1) * sizeof(char));
+	tmp = malloc(size2 + size1 + 1);
 	if (!tmp)
 		return (0);
-	if (size1 > 0)
+	if (*s1)
 		ft_memcpy(tmp, *s1, size1);
 	if (size2 > 0)
 		ft_memcpy(tmp + size1, s2, size2);
 	tmp[size1 + size2] = '\0';
-	if (*s1 && s1)
+	if (*s1)
 		free(*s1);
 	*s1 = tmp;
 	return (1);
@@ -130,6 +130,7 @@ char	*get_next_line(int fd)
 		{
 			if (!str_append_mem(&ret, buffer, temp - buffer + 1))
 			{
+				if (ret && *ret)
 				free(ret);
 				return (NULL);
 			}
