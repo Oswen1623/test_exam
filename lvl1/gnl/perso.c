@@ -60,16 +60,13 @@ int	str_append_mem(char **s1, char *s2, size_t size2)
 		return (0);
 	if (*s1)
 		size1 = ft_strlen(*s1);
-	tmp = malloc(size2 + size1 + 1);
+	tmp = malloc((size2 + size1 + 1) * sizeof(char));
 	if (!tmp)
 		return (0);
-	if (*s1)
-		ft_memcpy(tmp, *s1, size1);
-	if (size2 > 0)
-		ft_memcpy(tmp + size1, s2, size2);
+	ft_memcpy(tmp, *s1, size1);
+	ft_memcpy(tmp + size1, s2, size2);
 	tmp[size1 + size2] = '\0';
-	if (*s1)
-		free(*s1);
+	free(*s1);
 	*s1 = tmp;
 	return (1);
 }
@@ -105,7 +102,7 @@ char	*get_next_line(int fd)
 	int			bytes;
 	char		*ret;
 
-	temp = ft_strchr(buffer, '\n');
+	temp = NULL;
 	bytes = 0;
 	ret = NULL;
 	while (1)
@@ -114,26 +111,22 @@ char	*get_next_line(int fd)
 		if (!temp)
 		{
 			if (!str_append_str(&ret, buffer))
-				return (NULL);
+				return (free(ret), NULL);
 			bytes = read(fd, buffer, BUFFER_SIZE);
 			if (bytes < 0)
-				return (NULL);
+				return (free(ret), NULL);
 			if (bytes == 0)
 			{
 				if (ret && *ret)
 					return (ret);
-				return (NULL);
+				return (free(ret), NULL);
 			}
 			buffer[bytes] = '\0';
 		}
 		else
 		{
 			if (!str_append_mem(&ret, buffer, temp - buffer + 1))
-			{
-				if (ret && *ret)
-				free(ret);
-				return (NULL);
-			}
+				return (free(ret), NULL);
 			ft_memmove(buffer, temp + 1, ft_strlen(temp + 1) + 1);
 			return (ret);
 		}
