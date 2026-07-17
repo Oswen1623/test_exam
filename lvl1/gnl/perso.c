@@ -56,7 +56,7 @@ int	str_append_mem(char **s1, char *s2, size_t size2)
 	char	*tmp;
 
 	size1 = 0;
-	if (!s2 && size2 != 0)
+	if (!s2 && size2 == 0)
 		return (0);
 	if (*s1)
 		size1 = ft_strlen(*s1);
