@@ -7,7 +7,7 @@ char	*ft_strchr(char *s, int c)
 	i = 0;
 	if (!s)
 		return (NULL);
-	if(c == '\0')
+	if((char)c == '\0')
 		return NULL;
 	while (s[i])
 	{
@@ -66,7 +66,8 @@ int	str_append_mem(char **s1, char *s2, size_t size2)
 	}
 	if (*s1)
 		ft_memcpy(tmp, *s1, size1);
-	ft_memcpy(tmp + size1, s2, size2);
+	if(*s2)
+		ft_memcpy(tmp + size1, s2, size2);
 	tmp[size1 + size2] = '\0';
 	free(*s1);
 	*s1 = tmp;
@@ -96,7 +97,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1] = "";
+	static char	buffer[BUFFER_SIZE + 1];
 	char		*temp;
 	int			bytes;
 	char		*ret;
@@ -152,6 +153,9 @@ int	main(void)
 	while (line)
 	{
 		printf("%s", line);
+		free(line);
 		line = get_next_line(fd);
 	}
+	close(fd);
+	free(line);
 }
