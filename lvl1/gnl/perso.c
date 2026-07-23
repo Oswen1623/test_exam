@@ -7,8 +7,8 @@ char	*ft_strchr(char *s, int c)
 	i = 0;
 	if (!s)
 		return (NULL);
-	if((char)c == '\0')
-		return NULL;
+	// if((char)c == '\0')
+	// 	return NULL;
 	while (s[i])
 	{
 		if(s[i] == c)

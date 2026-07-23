@@ -4,9 +4,7 @@
 
 int	ft_strlen(char *s)
 {
-	int	i;
-
-	i = 0;
+	int	i = 0;
 	while (s[i])
 		i++;
 	return (i);
@@ -17,36 +15,23 @@ int	ft_isalpha(int c)
 	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
 }
 
-void	ft_swap(char *a, char *b)
-{
-	char	temp;
-
-	temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
 char	*order_string(char *s)
 {
 	int	len;
-	int	swapped;
-	int	i;
+	int	i = 0;
+	char temp = '\0';
 
 	len = ft_strlen(s);
-	swapped = 1;
-	while (swapped)
+	while (i < len - 1)
 	{
-		swapped = 0;
-		i = 0;
-		while (i < len - 1)
+		if (s[i] > s[i + 1])
 		{
-			if (s[i] > s[i + 1])
-			{
-				ft_swap(&s[i], &s[i + 1]);
-				swapped = 1;
-			}
-			i++;
+			temp = s[i];
+			s[i] = s[i + 1];
+			s[i + 1] = temp;
+			i = 0;
 		}
+		i++;
 	}
 	return (s);
 }
@@ -88,17 +73,18 @@ int	main(int argc, char **argv)
 	char	*result;
 	char	*source;
 
-	if (argc != 2)
-		return (1);
-	if (ft_strlen(argv[1]) == 0 || (argv[1][0] == ' ' && !argv[1][1]))
-		return (0);
 	i = 0;
+
+	if (argc != 2 || ft_strlen(argv[1]) == 0 || (argv[1][0] == ' ' && !argv[1][1]))
+		return (1);
+
 	while (argv[1][i])
 	{
 		if (!ft_isalpha(argv[1][i]))
-			return (0);
+			return (1);
 		i++;
 	}
+
 	len = ft_strlen(argv[1]);
 	result = calloc(len + 1, 1);
 	if (!result)

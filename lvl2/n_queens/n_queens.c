@@ -1,88 +1,74 @@
-#include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-int	ft_abs(int x)
+// Vérifie si l'on peut placer une reine à la position (col, row)
+static int is_safe(int *board, int col, int row)
 {
-	if (x < 0)
-		return (-x);
-	return (x);
+    int i = 0;
+    while (i < col)
+    {
+        int diff_row = board[i] - row;
+        if (diff_row < 0)
+            diff_row = -diff_row;
+
+        int diff_col = col - i;
+
+        // 1. Même ligne : board[i] == row
+        // 2. Même diagonale : la distance des lignes == la distance des colonnes
+        if (board[i] == row || diff_row == diff_col)
+            return 0;
+
+        i++;
+    }
+    return 1;
 }
 
-void	ft_putnbr(int n)
+static void solve(int *board, int col, int n)
 {
-	char c;
+    // Condition d'arrêt : toutes les colonnes contiennent une reine
+    if (col == n)
+    {
+        int i = 0;
+        while (i < n)
+        {
+            if (i == n - 1)
+                fprintf(stdout, "%d", board[i]);
+            else
+                fprintf(stdout, "%d ", board[i]);
+            i++;
+        }
+        fprintf(stdout, "\n");
+        return;
+    }
 
-	if (n >= 10)
-		ft_putnbr(n / 10);
-	c = (n % 10) + '0';
-	write(1, &c, 1);
+    // Essayer chaque ligne pour la colonne actuelle
+    int row = 0;
+    while (row < n)
+    {
+        if (is_safe(board, col, row))
+        {
+            board[col] = row;
+            solve(board, col + 1, n); // Passer à la colonne suivante
+        }
+        row++;
+    }
 }
 
-void	print_solution(int *pos, int n)
+int main(int argc, char **argv)
 {
-	int i = 0;
+    if (argc != 2)
+        return 0;
 
-	while (i < n)
-	{
-		ft_putnbr(pos[i]);
-		if (i < n - 1)
-			write(1, " ", 1);
-		i++;
-	}
-	write(1, "\n", 1);
-}
+    int n = atoi(argv[1]);
+    if (n <= 0)
+        return 0;
 
-int	is_safe(int *pos, int col, int row)
-{
-	int i = 0;
+    int *board = (int *)malloc(sizeof(int) * n);
+    if (!board)
+        return 1;
 
-	while (i < col)
-	{
-		if (pos[i] == row)
-			return (0);
-		if (ft_abs(pos[i] - row) == col - i)
-			return (0);
-		i++;
-	}
-	return (1);
-}
+    solve(board, 0, n);
 
-void	solve(int *pos, int n, int col)
-{
-	int row = 0;
-
-	if (col == n)
-	{
-		print_solution(pos, n);
-		return ;
-	}
-	while (row < n)
-	{
-		if (is_safe(pos, col, row))
-		{
-			pos[col] = row;
-			solve(pos, n, col + 1);
-		}
-		row++;
-	}
-}
-
-int	main(int argc, char **argv)
-{
-	int n;
-	int *pos;
-
-	if (argc != 2)
-		return (1);
-	n = atoi(argv[1]);
-	if (n <= 0)
-		return (0);
-
-	pos = malloc(sizeof(int) * n);
-	if (!pos)
-		return (1);
-
-	solve(pos, n, 0);
-	free(pos);
-	return (0);
+    free(board);
+    return 0;
 }
